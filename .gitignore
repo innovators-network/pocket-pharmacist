@@ -1,28 +1,77 @@
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
-env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
 venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
 .env
+.env.*
+!.env.example
+
+# AWS
+.aws/
+.aws-sam/
+
+# Logs
+*.log
+logs/
+log/
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Local development
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Chalice deployment config
 .chalice/deployments/
+.chalice/deployed/
 .chalice/venv/
 
-# Node.js/React artifacts
-web/node_modules/
-web/.pnp
-web/.pnp.js
-web/build/
-web/coverage/
-web/.DS_Store
-web/npm-debug.log*
-web/yarn-debug.log*
-web/yarn-error.log*
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/inspectionProfiles/Project_Default.xml
-/.idea/.gitignore
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/pocket-pharmacist.iml
-/.idea/vcs.xml
+# AWS credentials
+credentials
+credentials.csv
