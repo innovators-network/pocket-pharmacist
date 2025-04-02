@@ -25,19 +25,24 @@ Implementation Notes:
 """
 
 from typing import Dict, Any, Optional
-from ..services.translation_service import TranslationService
-from ..services.intent_recognition_service import IntentRecognitionService
-from ..services.medical_info_service import MedicalInfoService
+from corelib.services.interfaces import TranslationService
+from corelib.services.interfaces import IntentRecognitionService
+from corelib.services.interfaces import MedicalInfoService
 import logging
 from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
 class QueryHandler:
-    def __init__(self):
-        self.translation_service = TranslationService()
-        self.intent_service = IntentRecognitionService()
-        self.medical_service = MedicalInfoService()
+    def __init__(
+        self,
+        translation_service: TranslationService,
+        intent_service = IntentRecognitionService,
+        medical_service = MedicalInfoService
+    ):
+        self.translation_service = translation_service
+        self.intent_service = intent_service
+        self.medical_service = medical_service
         self.session_data: Dict[str, Any] = {}
         self.session_timeout = timedelta(hours=24)  # Session timeout after 24 hours
 
@@ -123,7 +128,7 @@ class QueryHandler:
             if source_lang == target_lang:
                 return text
                 
-            translated_text, detected_lang = self.translation_service.translate(text, source_lang, target_lang)
+            translated_text = self.translation_service.translate_text(text, source_lang, target_lang)
             return translated_text
         except Exception as e:
             logger.error(f"Translation error: {str(e)}")

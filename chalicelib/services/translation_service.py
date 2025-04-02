@@ -1,14 +1,20 @@
 import boto3
 import logging
 
+from typing_extensions import override
+
+from corelib.services.interfaces import TranslationService
+
 logger = logging.getLogger(__name__)
 
-class TranslationService:
+class AWSTranslationService(TranslationService):
+
     def __init__(self):
         """Initialize the AWS Translate client."""
         self.translate_client = boto3.client('translate')
-        
-    def translate_text(self, text, source_lang='auto', target_lang='en'):
+
+    @override
+    def translate_text(self, text, source_lang='auto', target_lang='en') -> str | None:
         """
         Translate text from source language to target language.
         

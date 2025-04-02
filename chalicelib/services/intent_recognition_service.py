@@ -25,9 +25,11 @@ from botocore.config import Config
 import logging
 import os
 
+from corelib.services.interfaces import IntentRecognitionService
+
 logger = logging.getLogger(__name__)
 
-class IntentRecognitionService:
+class AWSIntentRecognitionService(IntentRecognitionService):
     def __init__(self):
         self.client = boto3.client(
             'lexv2-runtime',
@@ -44,11 +46,12 @@ class IntentRecognitionService:
         if self.bot_id == 'YOUR_BOT_ID' or self.bot_alias_id == 'YOUR_BOT_ALIAS_ID':
             logger.warning("Lex bot configuration not set. Please set LEX_BOT_ID and LEX_BOT_ALIAS_ID environment variables.")
 
-    def recognize_intent(self, text: str) -> Dict[str, Any]:
+    def recognize_intent(self, text: str, session_id: str) -> Dict[str, Any]:
         """
         Recognize intent using AWS Lex
         Args:
             text: User's input text
+            session_id: Unique session identifier
         Returns:
             Dictionary containing intent and slots information
         """

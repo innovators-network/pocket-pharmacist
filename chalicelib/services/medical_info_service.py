@@ -22,31 +22,36 @@ Implementation Notes:
    - Add data versioning support
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, override
 import requests
 import logging
 from datetime import datetime
 
+from corelib.services.interfaces import MedicalInfoService
+
 logger = logging.getLogger(__name__)
 
-class MedicalInfoService:
+class AWSMedicalInfoService(MedicalInfoService):
     def __init__(self):
         self.base_url = "https://api.fda.gov/drug"
         self.session = requests.Session()
 
+    @override
     def initialize(self):
         """Initialize the service"""
         # No initialization needed for requests.Session()
 
+    @override
     def cleanup(self):
         """Cleanup resources"""
         if self.session:
             self.session.close()
 
+    @override
     def get_medical_info(
         self, 
         intent_data: Dict[str, Any],
-        context: Dict[str, Any] = None
+        context: Dict[str, Any] | None = None
     ) -> Dict[str, Any]:
         """
         Get medical information based on intent
@@ -84,9 +89,9 @@ class MedicalInfoService:
             logger.error(f"Error getting medical info: {str(e)}", exc_info=True)
             return self._create_error_response("An unexpected error occurred")
 
-    def _build_search_params(self, intent_name: str, drug_name: str) -> Dict[str, str]:
+    def _build_search_params(self, intent_name: str, drug_name: str) -> Dict[str, Any]:
         """Build FDA API search parameters"""
-        params = {"limit": 1}
+        params: Dict[str, Any] = {"limit": 1}
         
         # Map intents to FDA search terms
         intent_search_map = {

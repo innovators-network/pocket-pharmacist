@@ -1,10 +1,11 @@
 from typing import Dict, Any
 import uuid
-from ..orchestration.query_handler import QueryHandler
+from corelib.orchestration.query_handler import QueryHandler
 
-class ChatbotInterface:
-    def __init__(self):
-        self.query_handler = QueryHandler()
+class Chatbot:
+
+    def __init__(self, query_handler: QueryHandler):
+        self.query_handler = query_handler
 
     def handle_user_input(self, user_input: str, language: str = "auto") -> Dict[str, Any]:
         """

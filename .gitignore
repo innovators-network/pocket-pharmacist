@@ -50,10 +50,6 @@ log/
 htmlcov/
 .pytest_cache/
 
-# Distribution
-dist/
-build/
-*.egg-info/
 
 # Local development
 .DS_Store
@@ -65,7 +61,6 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db
 
 # Chalice deployment config
 .chalice/deployments/

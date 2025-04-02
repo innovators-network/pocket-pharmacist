@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "==2.31.0"
+python-dotenv = "==1.0.1"
+pytest = "==8.0.2"
+pytest-cov = "==4.1.0"
+black = "==24.2.0"
+flake8 = "==7.0.0"
+mypy = "*"
+chalice = "*"
+botocore = "*"
+boto3 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

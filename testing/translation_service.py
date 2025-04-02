@@ -1,6 +1,6 @@
 import boto3
 import logging
-from chalicelib.translation_service import TranslationService
+from chalicelib.services.translation_service import TranslationService
 
 # Simple test script for the translation service
 

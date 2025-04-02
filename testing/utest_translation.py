@@ -7,7 +7,7 @@ from unittest.mock import patch, MagicMock
 # Add parent directory to path to import the modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from chalicelib.translation_service import TranslationService
+from chalicelib.services.translation_service import TranslationService
 
 class TestTranslationService(unittest.TestCase):
     @patch('boto3.client')

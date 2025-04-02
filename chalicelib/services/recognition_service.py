@@ -1,10 +1,15 @@
+from typing import override
+
 import boto3
 import logging
 import json
 
+from corelib.services.interfaces import IntentRecognitionService
+
 logger = logging.getLogger(__name__)
 
-class IntentRecognitionService:
+class AWSIntentRecognitionService(IntentRecognitionService):
+
     def __init__(self, bot_id, bot_alias_id):
         """
         Initialize the AWS Lex client.
@@ -16,7 +21,8 @@ class IntentRecognitionService:
         self.lex_client = boto3.client('lexv2-runtime')
         self.bot_id = bot_id
         self.bot_alias_id = bot_alias_id
-        
+
+    @override
     def recognize_intent(self, text, session_id):
         """
         Recognize user intent using AWS Lex.
