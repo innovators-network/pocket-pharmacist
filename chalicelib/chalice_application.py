@@ -1,13 +1,13 @@
 from chalice import Chalice, CORSConfig, Response
-from corelib.interfaces.chatbot import Chatbot
+from core.interfaces.chatbot import Chatbot
 import logging
 import os
 from typing import Dict, Any, override
 from chalicelib.services.translation_service import AWSTranslationService
 from chalicelib.services.intent_recognition_service import AWSIntentRecognitionService
 from chalicelib.services.medical_info_service import AWSMedicalInfoService
-from corelib.orchestration.query_handler import QueryHandler
-from corelib.application import Application
+from core.orchestration.query_handler import QueryHandler
+from core.application import Application
 
 class ChaliceApplication(Application):
 

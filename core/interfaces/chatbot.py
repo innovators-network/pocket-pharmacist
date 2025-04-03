@@ -1,6 +1,6 @@
 from typing import Dict, Any
 import uuid
-from corelib.orchestration.query_handler import QueryHandler
+from core.orchestration.query_handler import QueryHandler
 
 class Chatbot:
 

@@ -4,7 +4,7 @@ import boto3
 import logging
 import json
 
-from corelib.services.interfaces import IntentRecognitionService
+from core.services.interfaces import IntentRecognitionService
 
 logger = logging.getLogger(__name__)
 

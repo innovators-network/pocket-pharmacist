@@ -25,7 +25,7 @@ from botocore.config import Config
 import logging
 import os
 
-from corelib.services.interfaces import IntentRecognitionService
+from core.services.interfaces import IntentRecognitionService
 
 logger = logging.getLogger(__name__)
 

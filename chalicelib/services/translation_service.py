@@ -3,7 +3,7 @@ import logging
 
 from typing_extensions import override
 
-from corelib.services.interfaces import TranslationService
+from core.services.interfaces import TranslationService
 
 logger = logging.getLogger(__name__)
 

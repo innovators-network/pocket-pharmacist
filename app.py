@@ -5,9 +5,9 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-from corelib.application import Application
-from corelib.orchestration.query_handler import QueryHandler
-from corelib.interfaces.chatbot import Chatbot
+from core.application import Application
+from core.orchestration.query_handler import QueryHandler
+from core.interfaces.chatbot import Chatbot
 
 #
 # Manual Dependency Injection by injecting AWS specific implementations.

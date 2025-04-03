@@ -25,9 +25,9 @@ Implementation Notes:
 """
 
 from typing import Dict, Any, Optional
-from corelib.services.interfaces import TranslationService
-from corelib.services.interfaces import IntentRecognitionService
-from corelib.services.interfaces import MedicalInfoService
+from core.services.interfaces import TranslationService
+from core.services.interfaces import IntentRecognitionService
+from core.services.interfaces import MedicalInfoService
 import logging
 from datetime import datetime, timedelta
 

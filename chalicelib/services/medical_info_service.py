@@ -27,7 +27,7 @@ import requests
 import logging
 from datetime import datetime
 
-from corelib.services.interfaces import MedicalInfoService
+from core.services.interfaces import MedicalInfoService
 
 logger = logging.getLogger(__name__)
 
