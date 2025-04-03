@@ -1,5 +1,13 @@
+"""
+Pocket Pharmacist API Entry Point
+
+This file defines API endpoints using the AWS Chalice framework.
+It handles HTTP request/response processing and delegates business logic to the chalicelib package.
+API routing and HTTP request/response processing only, actual business logic is delegated to the chalicelib package.
+"""
+
 from chalice import Chalice, CORSConfig, Response
-from chalicelib.interfaces.chatbot import ChatbotInterface
+from chalicelib.interfaces.chalice_chatbot_adapter import ChatbotInterface
 import logging
 import os
 from typing import Dict, Any

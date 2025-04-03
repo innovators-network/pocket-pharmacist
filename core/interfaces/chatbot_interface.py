@@ -1,22 +1,25 @@
 from typing import Dict, Any
 import uuid
-from ..orchestration.query_handler import QueryHandler
+from ..orchestration.query_handler_interface import QueryHandler
 
 class ChatbotInterface:
+    """
+    Pure business logic interface for the chatbot
+    This class is not dependent on any web framework or external service.
+    """
     def __init__(self):
         self.query_handler = QueryHandler()
 
     def handle_user_input(self, user_input: str, language: str = "auto") -> Dict[str, Any]:
         """
-        Handle user input and return appropriate response
+        Process user input and return appropriate response
         Args:
-            user_input: The text input from user in any supported language
+            user_input: User input in any supported language
             language: Source language code (default: auto-detect)
         Returns:
-            Dict containing response data
+            Dictionary containing response data
         """
         # Generate a unique session ID for each conversation
-        # In a production environment, this should be managed by the web framework
         session_id = str(uuid.uuid4())
         
         return self.query_handler.process_query(
@@ -29,12 +32,12 @@ class ChatbotInterface:
         """
         Format the response data into user-friendly message
         Args:
-            response_data: The response data from services
+            response_data: Response data from services
         Returns:
             Formatted string response
         """
         if response_data.get("status") == "error":
             return response_data.get("response", "An error occurred")
             
-        # Use translated response if available, otherwise use original response
+        # If translated response exists, use it, otherwise use the original response
         return response_data.get("translated_response") or response_data.get("response", "") 

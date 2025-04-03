@@ -1,3 +1,16 @@
+"""
+Chalice Library for Pocket Pharmacist
+
+This package contains code used with the AWS Chalice framework.
+It is organized as follows:
+
+1. Interfaces - User interface adapters
+2. Orchestration - Service orchestration and flow management
+3. Services - Core business services and external integration
+
+This architecture promotes separation of concerns and makes the code more maintainable.
+"""
+
 import logging
 import os
 

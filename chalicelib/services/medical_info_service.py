@@ -31,7 +31,8 @@ logger = logging.getLogger(__name__)
 
 class MedicalInfoService:
     def __init__(self):
-        self.base_url = "https://api.fda.gov/drug"
+        # Get OpenFDA API configuration from environment variables
+        self.base_url = os.getenv('OPENFDA_API_URL', 'https://api.fda.gov/drug')
         self.session = requests.Session()
 
     def initialize(self):

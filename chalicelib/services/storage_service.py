@@ -1,12 +1,18 @@
 import requests
 import logging
+import os
+import boto3
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
 class MedicalInfoService:
     def __init__(self):
-        """Initialize the FDA API base URL."""
-        self.fda_base_url = "https://api.fda.gov/drug/label.json"
+        """Initialize the FDA API base URL and S3 client."""
+        self.fda_base_url = os.getenv('OPENFDA_API_URL', 'https://api.fda.gov/drug') + "/label.json"
         
     def get_basic_info(self, intent_data):
         """
