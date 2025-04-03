@@ -7,9 +7,9 @@ from chalicelib.services.translation_service import AWSTranslationService
 from chalicelib.services.intent_recognition_service import AWSIntentRecognitionService
 from chalicelib.services.medical_info_service import AWSMedicalInfoService
 from corelib.orchestration.query_handler import QueryHandler
-from corelib.app import App
+from corelib.application import Application
 
-class ChaliceApp(App):
+class ChaliceApplication(Application):
 
     def __init__(self, query_handler: QueryHandler, chatbot: Chatbot):
         self.logger = logging.getLogger(__name__)
@@ -26,9 +26,11 @@ class ChaliceApp(App):
         self.query_handler = query_handler
         self.chatbot = chatbot
 
+
     @override
-    def start(self):
+    def start(self) -> Any:
         self._setup_routes()
+        return self.app
 
     def _setup_routes(self):
         @self.app.route('/', cors=self.cors_config)
