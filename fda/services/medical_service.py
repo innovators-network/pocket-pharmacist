@@ -6,8 +6,6 @@ from core.services.interfaces import MedicalInfoService
 from core.types.intents import Intent, DrugSideEffectsIntent, DrugDosageIntent, DrugInteractionsIntent, DrugWarningsIntent
 
 from core.services.interfaces import MedicalInfo, MedicalInfoResponse, MedicalInfoError
-from scripts.app import handle_side_effects
-
 
 class OpenFDAMedicalInfoService(MedicalInfoService):
 
