@@ -1,0 +1,237 @@
+{
+  "botName": "PocketPharmacistBot",
+  "description": "A medical advice chatbot that provides information on drug side effects, dosage, interactions, and warnings.",
+  "intents": [
+    {
+      "name": "DrugSideEffects",
+      "sampleUtterances": [
+        "What are the side effects of {DrugName} ?",
+        "Does {DrugName} cause any side effects?",
+        "Tell me the side effects of {DrugName} .",
+        "Can {DrugName} cause dizziness?",
+        "Are there any known adverse effects of {DrugName} ?",
+        "Is there anything I should watch out for with {DrugName} ?"
+      ],
+      "slots": [
+        {
+          "name": "DrugName",
+          "slotType": "DrugName",
+          "slotConstraint": "Required",
+          "valueElicitationPrompt": {
+            "messages": [
+              {
+                "contentType": "PlainText",
+                "content": "Which drug would you like information about?"
+              }
+            ],
+            "maxAttempts": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "DrugDosage",
+      "sampleUtterances": [
+        "What is the recommended dosage for {DrugName} ?",
+        "How much {DrugName} should I take?",
+        "What's the usual dose of {DrugName} ?",
+        "How many times a day can I take {DrugName} ?",
+        "Can you tell me the dosage for {DrugName} ?",
+        "What is the daily dose of {DrugName} ?"
+      ],
+      "slots": [
+        {
+          "name": "DrugName",
+          "slotType": "DrugName",
+          "slotConstraint": "Required",
+          "valueElicitationPrompt": {
+            "messages": [
+              {
+                "contentType": "PlainText",
+                "content": "Which drug are you asking about?"
+              }
+            ],
+            "maxAttempts": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "DrugInteractions",
+      "sampleUtterances": [
+        "Does {DrugName} interact with {OtherDrug} ?",
+        "Can I take {DrugName} with {OtherDrug} ?",
+        "Are there any drug interactions between {DrugName} and {OtherDrug} ?",
+        "Is it safe to take {DrugName} with {OtherDrug} ?",
+        "Do {DrugName} and {OtherDrug} have any negative interactions?"
+      ],
+      "slots": [
+        {
+          "name": "DrugName",
+          "slotType": "DrugName",
+          "slotConstraint": "Required",
+          "valueElicitationPrompt": {
+            "messages": [
+              {
+                "contentType": "PlainText",
+                "content": "Please specify the first drug name."
+              }
+            ],
+            "maxAttempts": 3
+          }
+        },
+        {
+          "name": "OtherDrug",
+          "slotType": "DrugName",
+          "slotConstraint": "Required",
+          "valueElicitationPrompt": {
+            "messages": [
+              {
+                "contentType": "PlainText",
+                "content": "Please specify the second drug name."
+              }
+            ],
+            "maxAttempts": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "DrugWarnings",
+      "sampleUtterances": [
+        "Are there any warnings for {DrugName} ?",
+        "Should I be careful with {DrugName} ?",
+        "Are there any precautions for taking {DrugName} ?",
+        "What should I avoid while taking {DrugName} ?",
+        "Does {DrugName} have any safety warnings?",
+        "Any known risks with {DrugName} ?"
+      ],
+      "slots": [
+        {
+          "name": "DrugName",
+          "slotType": "DrugName",
+          "slotConstraint": "Required",
+          "valueElicitationPrompt": {
+            "messages": [
+              {
+                "contentType": "PlainText",
+                "content": "Which drug do you need warnings for?"
+              }
+            ],
+            "maxAttempts": 3
+          }
+        }
+      ]
+    }
+  ],
+  "slotTypes": [
+    {
+      "name": "DrugName",
+      "enumerationValues": [
+        { "value": "Acetaminophen" },
+        { "value": "Paracetamol" },
+        { "value": "Ibuprofen" },
+        { "value": "Aspirin" },
+        { "value": "Naproxen" },
+        { "value": "Morphine" },
+        { "value": "Codeine" },
+        { "value": "Tramadol" },
+        { "value": "Hydrocodone" },
+        { "value": "Oxycodone" },
+        { "value": "Fentanyl" },
+        { "value": "Amoxicillin" },
+        { "value": "Penicillin" },
+        { "value": "Azithromycin" },
+        { "value": "Ciprofloxacin" },
+        { "value": "Doxycycline" },
+        { "value": "Metronidazole" },
+        { "value": "Cephalexin" },
+        { "value": "Levofloxacin" },
+        { "value": "Clindamycin" },
+        { "value": "Erythromycin" },
+        { "value": "Metformin" },
+        { "value": "Insulin" },
+        { "value": "Glipizide" },
+        { "value": "Sitagliptin" },
+        { "value": "Pioglitazone" },
+        { "value": "Atorvastatin" },
+        { "value": "Simvastatin" },
+        { "value": "Rosuvastatin" },
+        { "value": "Pravastatin" },
+        { "value": "Lovastatin" },
+        { "value": "Lisinopril" },
+        { "value": "Losartan" },
+        { "value": "Amlodipine" },
+        { "value": "Hydrochlorothiazide" },
+        { "value": "Metoprolol" },
+        { "value": "Atenolol" },
+        { "value": "Carvedilol" },
+        { "value": "Enalapril" },
+        { "value": "Valsartan" },
+        { "value": "Furosemide" },
+        { "value": "Omeprazole" },
+        { "value": "Pantoprazole" },
+        { "value": "Esomeprazole" },
+        { "value": "Ranitidine" },
+        { "value": "Famotidine" },
+        { "value": "Albuterol" },
+        { "value": "Budesonide" },
+        { "value": "Fluticasone" },
+        { "value": "Montelukast" },
+        { "value": "Ipratropium" },
+        { "value": "Sertraline" },
+        { "value": "Fluoxetine" },
+        { "value": "Citalopram" },
+        { "value": "Escitalopram" },
+        { "value": "Paroxetine" },
+        { "value": "Venlafaxine" },
+        { "value": "Duloxetine" },
+        { "value": "Bupropion" },
+        { "value": "Amitriptyline" },
+        { "value": "Trazodone" },
+        { "value": "Lorazepam" },
+        { "value": "Alprazolam" },
+        { "value": "Diazepam" },
+        { "value": "Clonazepam" },
+        { "value": "Midazolam" },
+        { "value": "Zolpidem" },
+        { "value": "Eszopiclone" },
+        { "value": "Diphenhydramine" },
+        { "value": "Hydroxyzine" },
+        { "value": "Prednisone" },
+        { "value": "Methylprednisolone" },
+        { "value": "Dexamethasone" },
+        { "value": "Hydrocortisone" },
+        { "value": "Levothyroxine" },
+        { "value": "Methimazole" },
+        { "value": "Warfarin" },
+        { "value": "Apixaban" },
+        { "value": "Rivaroxaban" },
+        { "value": "Clopidogrel" },
+        { "value": "Heparin" },
+        { "value": "Gabapentin" },
+        { "value": "Pregabalin" },
+        { "value": "Carbamazepine" },
+        { "value": "Phenytoin" },
+        { "value": "Levodopa" },
+        { "value": "Carbidopa" },
+        { "value": "Sumatriptan" },
+        { "value": "Rizatriptan" },
+        { "value": "Ondansetron" },
+        { "value": "Metoclopramide" },
+        { "value": "Loperamide" },
+        { "value": "Cetirizine" },
+        { "value": "Loratadine" },
+        { "value": "Fexofenadine" },
+        { "value": "Epinephrine" },
+        { "value": "Allopurinol" },
+        { "value": "Colchicine" },
+        { "value": "Sildenafil" },
+        { "value": "Tadalafil" },
+        { "value": "Tamoxifen" },
+        { "value": "Methotrexate" }
+      ]
+    }
+  ],
+  "locale": "en_US"
+}

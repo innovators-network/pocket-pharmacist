@@ -1,41 +1,61 @@
-from typing import Dict, Any
 import uuid
-from core.orchestration.query_handler import QueryHandler
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
+from datetime import datetime
+
+from core.orchestration.query_handler import QueryHandler, QueryRequest, QuerySuccess, QueryFailure
+
+
+@dataclass
+class ChatMessage:
+    sessionId: str
+    timestamp: str
+    text: str
+    language: str | None = None
+    context: Any | None = None
+
+    @property
+    def session_id(self) -> str:
+        return self.sessionId
+
+    @session_id.setter
+    def session_id(self, session_id: str) -> None:
+        self.sessionId = session_id
+
 
 class Chatbot:
 
     def __init__(self, query_handler: QueryHandler):
         self.query_handler = query_handler
 
-    def handle_user_input(self, user_input: str, language: str = "auto") -> Dict[str, Any]:
-        """
-        Handle user input and return appropriate response
-        Args:
-            user_input: The text input from user in any supported language
-            language: Source language code (default: auto-detect)
-        Returns:
-            Dict containing response data
-        """
-        # Generate a unique session ID for each conversation
-        # In a production environment, this should be managed by the web framework
-        session_id = str(uuid.uuid4())
-        
-        return self.query_handler.process_query(
-            query=user_input,
-            session_id=session_id,
-            source_lang=language
-        )
+    def handle_chat_message(self, chat_message: ChatMessage) -> ChatMessage:
+        session_id = chat_message.session_id
 
-    def format_response(self, response_data: Dict[str, Any]) -> str:
-        """
-        Format the response data into user-friendly message
-        Args:
-            response_data: The response data from services
-        Returns:
-            Formatted string response
-        """
-        if response_data.get("status") == "error":
-            return response_data.get("response", "An error occurred")
-            
-        # Use translated response if available, otherwise use original response
-        return response_data.get("translated_response") or response_data.get("response", "") 
+        query_request = QueryRequest(
+            text = chat_message.text,
+            session_id = session_id,
+            session_state = chat_message.context,
+            language = chat_message.language
+        )
+        
+        query_response = self.query_handler.process_query(query_request)
+        chat_response: ChatMessage
+        if isinstance(query_response, QuerySuccess):
+            chat_response = ChatMessage(
+                sessionId = session_id,
+                timestamp = chat_message.timestamp,
+                text = query_response.text,
+                language = chat_message.language,
+                context = query_response.session_state
+            )
+        elif isinstance(query_response, QueryFailure):
+            chat_response = ChatMessage(
+                sessionId = session_id,
+                timestamp = datetime.now().isoformat(),
+                text = query_response.error,
+                language = chat_message.language,
+                context = query_request.session_state
+            )
+        else:
+            raise ValueError("Invalid query response type")
+        return chat_response

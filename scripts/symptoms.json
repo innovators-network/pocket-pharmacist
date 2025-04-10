@@ -1,0 +1,464 @@
+{
+  "symptoms": {
+    "fever": [
+      {
+        "disease": "Influenza (Flu)",
+        "description": "A viral infection causing fever, body aches, and respiratory symptoms.",
+        "medications_or_advice": "Antivirals like Oseltamivir (Tamiflu) if prescribed early, Acetaminophen or Ibuprofen for fever, rest, and hydration."
+      },
+      {
+        "disease": "Common Cold",
+        "description": "A milder viral infection with fever, runny nose, and cough.",
+        "medications_or_advice": "Acetaminophen or Ibuprofen for fever, decongestants like Pseudoephedrine, rest, and fluids."
+      },
+      {
+        "disease": "Pneumonia",
+        "description": "A lung infection causing high fever, cough, and difficulty breathing.",
+        "medications_or_advice": "Antibiotics (e.g., Amoxicillin) for bacterial cases, fever reducers like Ibuprofen, oxygen therapy if severe; see a doctor."
+      },
+      {
+        "disease": "Malaria",
+        "description": "A parasitic infection with recurring fever, chills, and sweating.",
+        "medications_or_advice": "Antimalarial drugs (e.g., Chloroquine, Artemisinin-based therapy) prescribed by a doctor; seek medical attention."
+      }
+    ],
+    "cough": [
+      {
+        "disease": "Common Cold",
+        "description": "A viral infection with a dry or productive cough.",
+        "medications_or_advice": "Cough suppressants like Dextromethorphan, expectorants like Guaifenesin, honey, and warm fluids."
+      },
+      {
+        "disease": "Bronchitis",
+        "description": "Inflammation of the bronchial tubes causing persistent cough.",
+        "medications_or_advice": "Cough syrups (e.g., Guaifenesin), Ibuprofen for inflammation, rest; antibiotics if bacterial (prescribed)."
+      },
+      {
+        "disease": "Asthma",
+        "description": "A chronic condition with wheezing and coughing triggered by allergens.",
+        "medications_or_advice": "Inhaled corticosteroids (e.g., Fluticasone), bronchodilators (e.g., Albuterol), avoid triggers."
+      },
+      {
+        "disease": "Pneumonia",
+        "description": "A lung infection with cough, often with phlegm.",
+        "medications_or_advice": "Antibiotics (e.g., Azithromycin) for bacterial cases, cough medicine, rest; seek medical care."
+      }
+    ],
+    "headache": [
+      {
+        "disease": "Tension Headache",
+        "description": "Stress-related head pain, often a tight band-like sensation.",
+        "medications_or_advice": "Ibuprofen, Acetaminophen, stress management, and relaxation techniques."
+      },
+      {
+        "disease": "Migraine",
+        "description": "Severe, throbbing headache often with nausea or light sensitivity.",
+        "medications_or_advice": "Triptans (e.g., Sumatriptan), Ibuprofen, dark quiet room, avoid triggers."
+      },
+      {
+        "disease": "Sinusitis",
+        "description": "Inflammation of the sinuses causing headache and facial pressure.",
+        "medications_or_advice": "Decongestants (e.g., Pseudoephedrine), nasal saline spray, antibiotics if bacterial (prescribed)."
+      },
+      {
+        "disease": "Hypertension",
+        "description": "High blood pressure that may cause morning headaches.",
+        "medications_or_advice": "Antihypertensives (e.g., Lisinopril), lifestyle changes (e.g., reduce salt), consult a doctor."
+      }
+    ],
+    "fatigue": [
+      {
+        "disease": "Influenza (Flu)",
+        "description": "A viral infection causing extreme tiredness.",
+        "medications_or_advice": "Rest, hydration, Acetaminophen for discomfort, antivirals if prescribed."
+      },
+      {
+        "disease": "Anemia",
+        "description": "Low red blood cell count leading to persistent fatigue.",
+        "medications_or_advice": "Iron supplements, Vitamin B12, dietary changes (e.g., more red meat), consult a doctor."
+      },
+      {
+        "disease": "Chronic Fatigue Syndrome",
+        "description": "Unexplained, long-term exhaustion not relieved by rest.",
+        "medications_or_advice": "Pacing activities, cognitive behavioral therapy, no specific medication; medical guidance needed."
+      },
+      {
+        "disease": "Diabetes",
+        "description": "High blood sugar levels causing energy loss.",
+        "medications_or_advice": "Metformin, insulin if prescribed, balanced diet, regular monitoring."
+      }
+    ],
+    "sore throat": [
+      {
+        "disease": "Strep Throat",
+        "description": "A bacterial infection causing painful swallowing and fever.",
+        "medications_or_advice": "Antibiotics (e.g., Penicillin, Amoxicillin), throat lozenges, warm salt water gargle."
+      },
+      {
+        "disease": "Common Cold",
+        "description": "A viral infection with mild sore throat and congestion.",
+        "medications_or_advice": "Throat lozenges, honey and lemon, hydration, rest."
+      },
+      {
+        "disease": "Tonsillitis",
+        "description": "Inflammation of the tonsils causing throat pain.",
+        "medications_or_advice": "Antibiotics if bacterial (e.g., Amoxicillin), pain relievers like Ibuprofen, rest."
+      },
+      {
+        "disease": "Allergies",
+        "description": "Postnasal drip from allergies irritating the throat.",
+        "medications_or_advice": "Antihistamines (e.g., Cetirizine), nasal saline rinse, avoid allergens."
+      }
+    ],
+    "runny nose": [
+      {
+        "disease": "Common Cold",
+        "description": "A viral infection with nasal congestion and discharge.",
+        "medications_or_advice": "Decongestants (e.g., Phenylephrine), antihistamines, saline spray, rest."
+      },
+      {
+        "disease": "Allergies",
+        "description": "Seasonal or perennial reaction causing clear nasal discharge.",
+        "medications_or_advice": "Antihistamines (e.g., Loratadine), nasal corticosteroids (e.g., Fluticasone), avoid triggers."
+      },
+      {
+        "disease": "Sinusitis",
+        "description": "Sinus inflammation with thick nasal discharge.",
+        "medications_or_advice": "Decongestants, nasal saline, antibiotics if bacterial (prescribed)."
+      }
+    ],
+    "nausea": [
+      {
+        "disease": "Gastroenteritis",
+        "description": "Stomach flu with nausea, vomiting, and diarrhea.",
+        "medications_or_advice": "Rehydration salts, antiemetics (e.g., Ondansetron if prescribed), bland diet."
+      },
+      {
+        "disease": "Migraine",
+        "description": "Severe headache often accompanied by nausea.",
+        "medications_or_advice": "Antiemetics (e.g., Metoclopramide), Ibuprofen, rest in a dark room."
+      },
+      {
+        "disease": "Food Poisoning",
+        "description": "Bacterial contamination causing nausea and stomach upset.",
+        "medications_or_advice": "Hydration, Bismuth Subsalicylate (Pepto-Bismol), avoid solid food initially."
+      },
+      {
+        "disease": "Pregnancy",
+        "description": "Morning sickness with nausea in early stages.",
+        "medications_or_advice": "Ginger, Vitamin B6 (Pyridoxine), small frequent meals, consult a doctor."
+      }
+    ],
+    "diarrhea": [
+      {
+        "disease": "Gastroenteritis",
+        "description": "Viral or bacterial infection causing watery stools.",
+        "medications_or_advice": "Oral rehydration salts, Loperamide (Imodium) if advised, bland diet."
+      },
+      {
+        "disease": "Food Poisoning",
+        "description": "Contaminated food leading to diarrhea and cramps.",
+        "medications_or_advice": "Hydration, Bismuth Subsalicylate, rest; see a doctor if severe."
+      },
+      {
+        "disease": "Irritable Bowel Syndrome (IBS)",
+        "description": "Chronic condition with diarrhea and abdominal pain.",
+        "medications_or_advice": "Antispasmodics (e.g., Hyoscyamine), fiber supplements, dietary changes."
+      }
+    ],
+    "shortness of breath": [
+      {
+        "disease": "Asthma",
+        "description": "Airway inflammation causing breathing difficulty.",
+        "medications_or_advice": "Bronchodilators (e.g., Albuterol), inhaled corticosteroids (e.g., Budesonide), avoid triggers."
+      },
+      {
+        "disease": "Pneumonia",
+        "description": "Lung infection reducing oxygen intake.",
+        "medications_or_advice": "Antibiotics (e.g., Levofloxacin) for bacterial cases, oxygen therapy, rest; seek medical care."
+      },
+      {
+        "disease": "Chronic Obstructive Pulmonary Disease (COPD)",
+        "description": "Progressive lung disease with breathlessness.",
+        "medications_or_advice": "Bronchodilators (e.g., Salbutamol), corticosteroids, pulmonary rehab."
+      },
+      {
+        "disease": "Anxiety",
+        "description": "Psychological condition mimicking breathing issues.",
+        "medications_or_advice": "Breathing exercises, anti-anxiety meds (e.g., Lorazepam) if prescribed, therapy."
+      }
+    ],
+    "joint pain": [
+      {
+        "disease": "Arthritis",
+        "description": "Joint inflammation causing pain and stiffness.",
+        "medications_or_advice": "NSAIDs (e.g., Naproxen), physical therapy, heat/cold therapy."
+      },
+      {
+        "disease": "Influenza (Flu)",
+        "description": "Viral infection with body aches including joints.",
+        "medications_or_advice": "Acetaminophen, rest, hydration, antivirals if early."
+      },
+      {
+        "disease": "Lyme Disease",
+        "description": "Tick-borne illness with joint pain and swelling.",
+        "medications_or_advice": "Antibiotics (e.g., Doxycycline), pain relievers, consult a doctor."
+      }
+    ],
+    "rash": [
+      {
+        "disease": "Allergies",
+        "description": "Skin reaction to allergens causing redness or hives.",
+        "medications_or_advice": "Antihistamines (e.g., Diphenhydramine), hydrocortisone cream, avoid allergens."
+      },
+      {
+        "disease": "Measles",
+        "description": "Viral infection with a distinctive red rash.",
+        "medications_or_advice": "Supportive care (rest, hydration), Vitamin A if severe, consult a doctor."
+      },
+      {
+        "disease": "Eczema",
+        "description": "Chronic skin condition with itchy, inflamed patches.",
+        "medications_or_advice": "Moisturizers, topical steroids (e.g., Hydrocortisone), avoid irritants."
+      }
+    ],
+    "chest pain": [
+      {
+        "disease": "Angina",
+        "description": "Chest pain from reduced heart blood flow.",
+        "medications_or_advice": "Nitroglycerin, beta-blockers (e.g., Metoprolol), seek immediate medical help."
+      },
+      {
+        "disease": "Gastroesophageal Reflux Disease (GERD)",
+        "description": "Acid reflux causing burning chest pain.",
+        "medications_or_advice": "Antacids (e.g., Tums), PPIs (e.g., Omeprazole), avoid spicy foods."
+      },
+      {
+        "disease": "Pneumonia",
+        "description": "Lung infection with chest discomfort.",
+        "medications_or_advice": "Antibiotics if bacterial, pain relievers, rest; see a doctor."
+      }
+    ],
+    "dizziness": [
+      {
+        "disease": "Dehydration",
+        "description": "Fluid loss causing lightheadedness.",
+        "medications_or_advice": "Oral rehydration solutions, water, rest in a cool place."
+      },
+      {
+        "disease": "Vertigo",
+        "description": "Inner ear issue causing spinning sensation.",
+        "medications_or_advice": "Meclizine, vestibular exercises, avoid sudden movements."
+      },
+      {
+        "disease": "Hypotension",
+        "description": "Low blood pressure leading to dizziness.",
+        "medications_or_advice": "Increase salt intake, hydration, compression stockings; consult a doctor."
+      }
+    ],
+    "abdominal pain": [
+      {
+        "disease": "Gastroenteritis",
+        "description": "Stomach infection with cramping pain.",
+        "medications_or_advice": "Hydration, bland diet, antispasmodics (e.g., Dicyclomine) if needed."
+      },
+      {
+        "disease": "Appendicitis",
+        "description": "Inflammation of the appendix with sharp pain.",
+        "medications_or_advice": "Surgery (appendectomy), antibiotics, seek immediate medical help."
+      },
+      {
+        "disease": "Irritable Bowel Syndrome (IBS)",
+        "description": "Chronic digestive issue with abdominal discomfort.",
+        "medications_or_advice": "Fiber supplements, antispasmodics, dietary changes (e.g., low FODMAP)."
+      }
+    ],
+    "itchy eyes": [
+      {
+        "disease": "Allergies",
+        "description": "Reaction to pollen or dust causing eye irritation.",
+        "medications_or_advice": "Antihistamine eye drops (e.g., Ketotifen), oral antihistamines, avoid allergens."
+      },
+      {
+        "disease": "Conjunctivitis (Pink Eye)",
+        "description": "Eye infection or inflammation with itching.",
+        "medications_or_advice": "Antibiotic drops if bacterial, warm compresses, good hygiene."
+      },
+      {
+        "disease": "Dry Eye Syndrome",
+        "description": "Insufficient tear production causing itchy eyes.",
+        "medications_or_advice": "Artificial tears, omega-3 supplements, humidifier use."
+      }
+    ],
+    "chills": [
+      {
+        "disease": "Influenza (Flu)",
+        "description": "Viral infection with fever and shaking chills.",
+        "medications_or_advice": "Acetaminophen, rest, warm blankets, antivirals if prescribed."
+      },
+      {
+        "disease": "Malaria",
+        "description": "Parasitic infection with cyclical chills and fever.",
+        "medications_or_advice": "Antimalarials (e.g., Artemisinin), fever reducers, seek medical care."
+      },
+      {
+        "disease": "Urinary Tract Infection (UTI)",
+        "description": "Bacterial infection with chills, especially if it reaches the kidneys.",
+        "medications_or_advice": "Antibiotics (e.g., Nitrofurantoin), hydration, see a doctor."
+      }
+    ],
+    "sweating": [
+      {
+        "disease": "Hyperthyroidism",
+        "description": "Overactive thyroid causing excessive sweating and heat intolerance.",
+        "medications_or_advice": "Antithyroid drugs (e.g., Methimazole), beta-blockers, consult a doctor."
+      },
+      {
+        "disease": "Malaria",
+        "description": "Parasitic infection with fever and profuse sweating.",
+        "medications_or_advice": "Antimalarials (e.g., Chloroquine), hydration, medical treatment."
+      },
+      {
+        "disease": "Menopause",
+        "description": "Hormonal changes causing night sweats and hot flashes.",
+        "medications_or_advice": "Hormone replacement therapy (if advised), cooling techniques, lifestyle changes."
+      }
+    ],
+    "loss of appetite": [
+      {
+        "disease": "Gastroenteritis",
+        "description": "Stomach infection reducing desire to eat.",
+        "medications_or_advice": "Hydration, bland diet (e.g., BRAT), gradual refeeding."
+      },
+      {
+        "disease": "Depression",
+        "description": "Mental health condition affecting appetite.",
+        "medications_or_advice": "Antidepressants (e.g., SSRIs), therapy, small frequent meals."
+      },
+      {
+        "disease": "Hepatitis",
+        "description": "Liver inflammation causing nausea and appetite loss.",
+        "medications_or_advice": "Supportive care, antivirals if chronic (e.g., Sofosbuvir), medical supervision."
+      }
+    ],
+    "muscle cramps": [
+      {
+        "disease": "Dehydration",
+        "description": "Fluid and electrolyte imbalance causing cramps.",
+        "medications_or_advice": "Electrolyte drinks, stretching, hydration."
+      },
+      {
+        "disease": "Hypokalemia",
+        "description": "Low potassium levels leading to muscle spasms.",
+        "medications_or_advice": "Potassium supplements, bananas/oranges, consult a doctor."
+      },
+      {
+        "disease": "Fibromyalgia",
+        "description": "Chronic condition with widespread pain and cramps.",
+        "medications_or_advice": "Pain relievers (e.g., Pregabalin), exercise, stress reduction."
+      }
+    ],
+    "swollen lymph nodes": [
+      {
+        "disease": "Strep Throat",
+        "description": "Bacterial infection with tender neck nodes.",
+        "medications_or_advice": "Antibiotics (e.g., Amoxicillin), warm compresses, rest."
+      },
+      {
+        "disease": "Mononucleosis",
+        "description": "Viral infection causing swollen glands and fatigue.",
+        "medications_or_advice": "Rest, hydration, pain relievers; avoid contact sports."
+      },
+      {
+        "disease": "Lymphoma",
+        "description": "Cancer of the lymphatic system with persistent node swelling.",
+        "medications_or_advice": "Chemotherapy, radiation, biopsy needed; seek immediate medical care."
+      }
+    ],
+    "blurred vision": [
+      {
+        "disease": "Diabetes",
+        "description": "High blood sugar affecting eye blood vessels.",
+        "medications_or_advice": "Blood sugar control (e.g., Insulin), regular eye exams, consult a doctor."
+      },
+      {
+        "disease": "Migraine",
+        "description": "Visual aura preceding headache with blurry spots.",
+        "medications_or_advice": "Triptans (e.g., Rizatriptan), rest, avoid triggers."
+      },
+      {
+        "disease": "Glaucoma",
+        "description": "Eye pressure causing gradual vision loss.",
+        "medications_or_advice": "Eye drops (e.g., Latanoprost), surgery if severe, urgent care needed."
+      }
+    ],
+    "palpitations": [
+      {
+        "disease": "Anxiety",
+        "description": "Stress-induced rapid or irregular heartbeat.",
+        "medications_or_advice": "Relaxation techniques, beta-blockers if prescribed, therapy."
+      },
+      {
+        "disease": "Hyperthyroidism",
+        "description": "Overactive thyroid causing heart racing.",
+        "medications_or_advice": "Antithyroid meds (e.g., Propylthiouracil), beta-blockers, medical evaluation."
+      },
+      {
+        "disease": "Arrhythmia",
+        "description": "Irregular heart rhythm with noticeable beats.",
+        "medications_or_advice": "Antiarrhythmics (e.g., Amiodarone), pacemaker if needed, consult a cardiologist."
+      }
+    ],
+    "weight loss": [
+      {
+        "disease": "Hyperthyroidism",
+        "description": "Overactive thyroid increasing metabolism.",
+        "medications_or_advice": "Antithyroid drugs (e.g., Methimazole), nutritional support, doctor visit."
+      },
+      {
+        "disease": "Diabetes",
+        "description": "Uncontrolled blood sugar causing unintentional weight loss.",
+        "medications_or_advice": "Insulin or Metformin, balanced diet, regular monitoring."
+      },
+      {
+        "disease": "Cancer",
+        "description": "Various types may cause unexplained weight loss.",
+        "medications_or_advice": "Depends on type (e.g., chemotherapy), nutritional support, urgent medical evaluation."
+      }
+    ],
+    "frequent urination": [
+      {
+        "disease": "Diabetes",
+        "description": "High blood sugar increasing urine output.",
+        "medications_or_advice": "Blood sugar management (e.g., Metformin), hydration, doctor consultation."
+      },
+      {
+        "disease": "Urinary Tract Infection (UTI)",
+        "description": "Bladder infection causing urgent, frequent urination.",
+        "medications_or_advice": "Antibiotics (e.g., Trimethoprim), cranberry juice, hydration."
+      },
+      {
+        "disease": "Prostate Enlargement",
+        "description": "Benign condition in men increasing urination frequency.",
+        "medications_or_advice": "Alpha-blockers (e.g., Tamsulosin), surgery if severe, consult a urologist."
+      }
+    ],
+    "dry mouth": [
+      {
+        "disease": "Dehydration",
+        "description": "Fluid loss reducing saliva production.",
+        "medications_or_advice": "Water, electrolyte drinks, avoid caffeine."
+      },
+      {
+        "disease": "Diabetes",
+        "description": "High blood sugar causing dry mouth and thirst.",
+        "medications_or_advice": "Blood sugar control (e.g., Insulin), sugar-free gum, hydration."
+      },
+      {
+        "disease": "Sjogren’s Syndrome",
+        "description": "Autoimmune disorder affecting salivary glands.",
+        "medications_or_advice": "Artificial saliva, pilocarpine if prescribed, manage symptoms with a doctor."
+      }
+    ]
+  }
+}

@@ -1,204 +1,119 @@
-"""
-Orchestration Layer Implementation
-Team: Member 4 (Orchestration Layer Team)
-Responsibilities:
-- Manage the overall flow of the application
-- Handle service integration
-- Manage session data
-- Error handling and logging
 
-Implementation Notes:
-1. Current Implementation:
-   - Basic service orchestration
-   - Multi-language support through AWS Translate
-   - Session management
-   - Error handling
-   - Translation flow
-
-2. TODO:
-   - Enhance data retrieval flow:
-     * Integrate with S3 for stored data
-     * Integrate with DynamoDB for metadata
-   - Add caching layer for frequent queries
-   - Implement rate limiting
-   - Add monitoring and metrics
-"""
-
-from typing import Dict, Any, Optional
-from core.services.interfaces import TranslationService
+from typing import Dict, Any, Optional, override
+from dataclasses import dataclass
+from core.services.interfaces import TranslationService, MedicalInfoError, MedicalInfo
 from core.services.interfaces import IntentRecognitionService
 from core.services.interfaces import MedicalInfoService
 import logging
 from datetime import datetime, timedelta
 
+from core.types.intents import UnknownIntent
+
 logger = logging.getLogger(__name__)
 
+@dataclass
+class QueryRequest:
+    text: str
+    session_id: str
+    session_state: Any | None = None
+    language: str | None = None
+
+@dataclass
+class QuerySuccess:
+    text: str
+    session_id: str
+    session_state: Any | None = None
+    language: str | None = None
+
+@dataclass
+class QueryFailure:
+    error: str
+    session_id: str
+
+type QueryResponse = QuerySuccess | QueryFailure
+
 class QueryHandler:
+
     def __init__(
         self,
         translation_service: TranslationService,
-        intent_service = IntentRecognitionService,
+        intent_recognition_service = IntentRecognitionService,
         medical_service = MedicalInfoService
     ):
         self.translation_service = translation_service
-        self.intent_service = intent_service
+        self.intent_recognition_service = intent_recognition_service
         self.medical_service = medical_service
         self.session_data: Dict[str, Any] = {}
         self.session_timeout = timedelta(hours=24)  # Session timeout after 24 hours
 
     def initialize(self):
-        """Initialize all services"""
+        self.translation_service.initialize()
+        self.intent_recognition_service.initialize()
         self.medical_service.initialize()
-        # Other services will be initialized by their respective teams
 
     def cleanup(self):
-        """Cleanup all services"""
         self.medical_service.cleanup()
-        # Other services will be cleaned up by their respective teams
+        self.intent_recognition_service.cleanup()
+        self.translation_service.cleanup()
 
-    def process_query(
-        self, 
-        query: str, 
-        session_id: str,
-        source_lang: str = "auto", 
-        target_lang: str = "en"
-    ) -> Dict[str, Any]:
-        """
-        Main orchestration method to process user queries
-        Args:
-            query: User's input text in any supported AWS Translate language
-            session_id: Unique session identifier
-            source_lang: Source language code (default: auto-detect)
-            target_lang: Target language for response
-        Returns:
-            Processed response with medical information
-        """
+    def process_query(self, query: QueryRequest) -> QueryResponse:
         try:
-            logger.info(f"Processing query for session {session_id}: {query}")
-            
-            # Clean up expired sessions
-            self._cleanup_expired_sessions()
-            
-            # Step 1: Translate query to English for processing
-            translated_query = self._handle_translation(query, source_lang, "en")
-            if not translated_query:
-                return self._create_error_response("Translation failed", source_lang)
-
-            # Step 2: Get intent from Lex (English input)
-            intent_data = self.intent_service.recognize_intent(translated_query)
-            if not intent_data.get('intent'):
-                return self._create_error_response("Could not understand the query", source_lang)
-
-            # Step 3: Get information based on intent
-            medical_response = self._get_medical_info(intent_data, session_id)
-            if medical_response.get("status") == "error":
-                return self._create_error_response(medical_response.get("message", "Unknown error"), source_lang)
-
-            # Step 4: Translate response to target language
-            final_response = self._prepare_final_response(
-                medical_response,
-                source_lang,
-                target_lang
+            return self._process_query(query)
+        except Exception as e:
+            return QueryFailure(
+                error=str(e),
+                session_id=query.session_id
             )
 
-            # Step 5: Update session data
-            self._update_session_data(session_id, {
-                "last_query": query,
-                "last_intent": intent_data.get('intent'),
-                "timestamp": datetime.utcnow().isoformat(),
-                "query_count": self.session_data.get(session_id, {}).get("query_count", 0) + 1
-            })
+    def _process_query(self, query: QueryRequest) -> QueryResponse:
+        logger.info(f"Processing query for session {query.session_id}: {query.text}")
 
-            return final_response
+        source_lang = query.language or "en_US"
+        target_lang = "en_US"  # Default target language
 
-        except Exception as e:
-            logger.error(f"Error processing query: {str(e)}", exc_info=True)
-            return self._create_error_response("An unexpected error occurred", source_lang)
+        translated_text = self.translation_service.translate_text(query.text, source_lang, target_lang)
+        if not translated_text:
+            return QueryFailure(
+                error = "Translation failed, language: " + source_lang,
+                session_id = query.session_id
+            )
 
-    def _handle_translation(
-        self, 
-        text: str, 
-        source_lang: str, 
-        target_lang: str
-    ) -> Optional[str]:
-        """
-        Handle translation of text between languages
-        """
-        try:
-            if source_lang == target_lang:
-                return text
-                
-            translated_text = self.translation_service.translate_text(text, source_lang, target_lang)
-            return translated_text
-        except Exception as e:
-            logger.error(f"Translation error: {str(e)}")
-            return None
+        intent_response = self.intent_recognition_service.recognize_intent(translated_text, query.session_id, query.session_state)
+        intent = intent_response.intent
 
-    def _get_medical_info(
-        self, 
-        intent_data: Dict[str, Any],
-        session_id: str
-    ) -> Dict[str, Any]:
-        """
-        Get medical information based on intent
-        """
-        try:
-            return self.medical_service.get_medical_info(intent_data)
-        except Exception as e:
-            logger.error(f"Error getting medical info: {str(e)}")
-            return self._create_error_response("Failed to retrieve medical information", "en")
+        if isinstance(intent, UnknownIntent):
+            error_text = "I'm sorry, I couldn't understand your request. Could you please rephrase it?"
+            translated_error_text = self.translation_service.translate_text(error_text, target_lang, source_lang)
+            return QueryFailure(
+                error = translated_error_text,
+                session_id = query.session_id
+            )
 
-    def _prepare_final_response(
-        self,
-        medical_response: Dict[str, Any],
-        source_lang: str,
-        target_lang: str
-    ) -> Dict[str, Any]:
-        """
-        Prepare the final response with translations
-        """
-        try:
-            if source_lang != target_lang:
-                translated_response = self._handle_translation(
-                    medical_response.get("response", ""),
-                    "en",
-                    target_lang
-                )
-                if translated_response:
-                    medical_response["translated_response"] = translated_response
+        medical_info_response = self.medical_service.get_medical_info(intent)
 
-            return medical_response
-        except Exception as e:
-            logger.error(f"Error preparing response: {str(e)}")
-            return medical_response
+        response: QueryResponse | None = None
 
-    def _update_session_data(self, session_id: str, data: Dict[str, Any]) -> None:
-        """
-        Update session data with new information
-        """
-        if session_id not in self.session_data:
-            self.session_data[session_id] = {}
-        self.session_data[session_id].update(data)
+        if isinstance(medical_info_response, MedicalInfo):
+            medical_info = medical_info_response
+            translated_medical_info_text = self.translation_service.translate_text(medical_info.message, target_lang, source_lang)
+            response = QuerySuccess(
+                text = medical_info.message,
+                session_id = query.session_id,
+                session_state = intent_response.session_state,
+                language = target_lang
+            )
+        elif isinstance(medical_info_response, MedicalInfoError):
+            error_text = medical_info_response.error
+            translated_error_text = self.translation_service.translate_text(error_text, target_lang, source_lang)
+            return QueryFailure(
+                error = translated_error_text,
+                session_id = query.session_id
+            )
+        else:
+            logger.error("Unexpected response from medical service")
+            return QueryFailure(
+                error = "An unexpected error occurred while processing your request.",
+                session_id = query.session_id
+            )
 
-    def _cleanup_expired_sessions(self) -> None:
-        """
-        Remove expired sessions from session data
-        """
-        current_time = datetime.utcnow()
-        expired_sessions = [
-            session_id for session_id, data in self.session_data.items()
-            if current_time - datetime.fromisoformat(data["timestamp"]) > self.session_timeout
-        ]
-        for session_id in expired_sessions:
-            del self.session_data[session_id]
-
-    def _create_error_response(self, error_message: str, language: str) -> Dict[str, Any]:
-        """
-        Create standardized error response
-        """
-        return {
-            "status": "error",
-            "message": error_message,
-            "response": error_message,
-            "language": language
-        } 
+        return response

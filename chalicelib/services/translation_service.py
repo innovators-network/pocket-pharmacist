@@ -10,33 +10,33 @@ logger = logging.getLogger(__name__)
 class AWSTranslationService(TranslationService):
 
     def __init__(self):
-        """Initialize the AWS Translate client."""
         self.translate_client = boto3.client('translate')
 
     @override
-    def translate_text(self, text, source_lang='auto', target_lang='en') -> str | None:
-        """
-        Translate text from source language to target language.
-        
-        Args:
-            text (str): Text to translate
-            source_lang (str): Source language code (default: auto-detect)
-            target_lang (str): Target language code (default: English)
-            
-        Returns:
-            str: Translated text
-        """
+    def initialize(self):
+        # No initialization needed for boto3 client
+        pass
+
+    @override
+    def cleanup(self):
+        # No cleanup needed for boto3 client
+        pass
+
+    @override
+    def translate_text(self, text: str, source_lang: str, target_lang: str) -> str:
         try:
-            if not text:
-                return ""
-                
-            response = self.translate_client.translate_text(
-                Text=text,
-                SourceLanguageCode=source_lang,
-                TargetLanguageCode=target_lang
-            )
-            
-            return response['TranslatedText']
+            return self._translate_text(text, source_lang, target_lang)
         except Exception as e:
-            logger.error(f"Translation error: {str(e)}")
-            return None
+            logger.error(f"Error translating text: {e}")
+            return text
+
+    def _translate_text(self, text: str, source_lang: str, target_lang: str) -> str:
+        if source_lang == target_lang or len(text.strip()) == 0:
+            return text
+
+        response = self.translate_client.translate_text(
+            Text=text,
+            SourceLanguageCode=source_lang,
+            TargetLanguageCode=target_lang
+        )
+        return response['TranslatedText']
