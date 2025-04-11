@@ -1,0 +1,44 @@
+
+@startuml ArchitectureDiagram
+skinparam componentStyle rectangle
+
+package "Client Layer" {
+  [Client Web/Mobile App]
+}
+
+package "API Gateway Layer" {
+  [Chalice App]
+}
+
+package "Adapter Layer" {
+  [Chatbot Adapter]
+}
+
+package "Core Application Layer" {
+  [QueryHandler]
+}
+
+package "Service Layer" {
+  [TranslationService <<interface>>]
+  [IntentRecognitionService <<interface>>]
+  [MedicalInfoService <<interface>>]
+}
+
+package "Platform Implementations" {
+  [AWSTranslationService]
+  [AWSIntentRecognitionService]
+  [OpenFDAMedicalInfoService]
+}
+
+[Client Web/Mobile App] --> [Chalice App] : HTTP Request
+[Chalice App] --> [Chatbot Adapter] : Route Request
+[Chatbot Adapter] --> [QueryHandler] : dispatch(query)
+
+[QueryHandler] --> [TranslationService] : uses
+[QueryHandler] --> [IntentRecognitionService] : uses
+[QueryHandler] --> [MedicalInfoService] : uses
+
+[AWSTranslationService] ..|> [TranslationService]
+[AWSIntentRecognitionService] ..|> [IntentRecognitionService]
+[OpenFDAMedicalInfoService] ..|> [MedicalInfoService]
+@enduml

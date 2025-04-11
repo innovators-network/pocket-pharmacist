@@ -1,0 +1,45 @@
+
+@startuml ClassDiagram
+interface TranslationService {
+  +translate(text, lang)
+}
+
+interface IntentRecognitionService {
+  +recognize_intent(text)
+}
+
+interface MedicalInfoService {
+  +fetch_info(drug)
+}
+
+class AWSTranslationService {
+  +translate(text, lang)
+}
+AWSTranslationService --|> TranslationService
+
+class AWSIntentRecognitionService {
+  +recognize_intent(text)
+}
+AWSIntentRecognitionService --|> IntentRecognitionService
+
+class OpenFDAMedicalInfoService {
+  +fetch_info(drug)
+}
+OpenFDAMedicalInfoService --|> MedicalInfoService
+
+class QueryHandler {
+  -translationService
+  -intentService
+  -medicalService
+  +handle(query)
+}
+QueryHandler --> TranslationService : uses
+QueryHandler --> IntentRecognitionService : uses
+QueryHandler --> MedicalInfoService : uses
+
+class Chatbot {
+  -queryHandler
+  +route(request)
+}
+Chatbot --> QueryHandler : delegates
+@enduml

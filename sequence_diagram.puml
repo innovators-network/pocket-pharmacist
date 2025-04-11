@@ -1,0 +1,20 @@
+
+@startuml SequenceDiagram
+actor Client
+participant "Chalice App" as Chalice
+participant "Chatbot (Adapter)" as Chatbot
+participant "QueryHandler" as Handler
+participant "IntentRecognitionService" as Intent
+participant "TranslationService" as Translation
+participant "MedicalInfoService" as Medical
+
+Client -> Chalice : HTTP Request
+Chalice -> Chatbot : Route to Adapter
+Chatbot -> Handler : dispatch(query)
+Handler -> Intent : recognize_intent(text)
+Handler -> Translation : translate(text, lang)
+Handler -> Medical : fetch_info(medication)
+Handler --> Chatbot : return result
+Chatbot -> Chalice : response
+Chalice -> Client : HTTP Response
+@enduml

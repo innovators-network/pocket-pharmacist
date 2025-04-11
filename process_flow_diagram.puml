@@ -1,0 +1,13 @@
+
+@startuml ProcessFlowDiagram
+start
+:Client Request;
+:Chalice App Routing;
+:Chatbot Adapter;
+:QueryHandler (Business Logic);
+:Intent Recognition Service;
+:Translation Service;
+:Medical Info Service;
+:Generate Response;
+stop
+@enduml

@@ -1,0 +1,20 @@
+
+@startuml PlatformServiceIntegration
+skinparam componentStyle rectangle
+
+package "Application Services" {
+  [AWSTranslationService]
+  [AWSIntentRecognitionService]
+  [OpenFDAMedicalInfoService]
+}
+
+package "External Platforms" {
+  [Amazon Translate API]
+  [Amazon Lex V2]
+  [OpenFDA REST API]
+}
+
+[AWSTranslationService] --> [Amazon Translate API] : Calls translate_text
+[AWSIntentRecognitionService] --> [Amazon Lex V2] : Sends userInput + sessionId
+[OpenFDAMedicalInfoService] --> [OpenFDA REST API] : Queries drug/label
+@enduml
