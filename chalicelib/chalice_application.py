@@ -78,7 +78,7 @@ class ChaliceApplication(Application):
         session_id = request_body['sessionId']
         timestamp = request_body['timestamp']
         text = request_body['text']
-        language = request_body.get('language', 'en_US')
+        language = request_body.get('language', None)
         context = request_body.get('context', None)
         if not isinstance(text, str) or not text.strip():
             raise APIError('Invalid message format', status_code=400)

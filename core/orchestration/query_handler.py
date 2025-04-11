@@ -68,22 +68,34 @@ class QueryHandler:
     def _process_query(self, query: QueryRequest) -> QueryResponse:
         logger.info(f"Processing query for session {query.session_id}: {query.text}")
 
-        source_lang = query.language or "en_US"
-        target_lang = "en_US"  # Default target language
+        source_lang = query.language
+        english_lang = "en"  # Default common language
 
-        translated_text = self.translation_service.translate_text(query.text, source_lang, target_lang)
-        if not translated_text:
+        translated_text_in_english, detected_source_lang, _ = self.translation_service.translate_text(query.text, source_lang, english_lang)
+        if not translated_text_in_english:
             return QueryFailure(
-                error = "Translation failed, language: " + source_lang,
+                error = f"Translation failed, language: {source_lang}",
                 session_id = query.session_id
             )
 
-        intent_response = self.intent_recognition_service.recognize_intent(translated_text, query.session_id, query.session_state)
+        if not source_lang:
+            if not detected_source_lang:
+                return QueryFailure(
+                    error = f"Language detection failed, language: {source_lang}",
+                    session_id = query.session_id
+                )
+            else:
+                logger.info(f"Detected source language: {detected_source_lang}")
+        else:
+            if detected_source_lang != source_lang:
+                logger.warning(f"Detected source language: {detected_source_lang}, expected: {source_lang}")
+
+        intent_response = self.intent_recognition_service.recognize_intent(translated_text_in_english, query.session_id, query.session_state)
         intent = intent_response.intent
 
         if isinstance(intent, UnknownIntent):
             error_text = "I'm sorry, I couldn't understand your request. Could you please rephrase it?"
-            translated_error_text = self.translation_service.translate_text(error_text, target_lang, source_lang)
+            translated_error_text, _, _ = self.translation_service.translate_text(error_text, english_lang, detected_source_lang)
             return QueryFailure(
                 error = translated_error_text,
                 session_id = query.session_id
@@ -95,16 +107,16 @@ class QueryHandler:
 
         if isinstance(medical_info_response, MedicalInfo):
             medical_info = medical_info_response
-            translated_medical_info_text = self.translation_service.translate_text(medical_info.message, target_lang, source_lang)
+            medical_info_text_in_source_lang, _, _ = self.translation_service.translate_text(medical_info.message, english_lang, detected_source_lang)
             response = QuerySuccess(
-                text = medical_info.message,
+                text = medical_info_text_in_source_lang,
                 session_id = query.session_id,
                 session_state = intent_response.session_state,
-                language = target_lang
+                language = detected_source_lang
             )
         elif isinstance(medical_info_response, MedicalInfoError):
             error_text = medical_info_response.error
-            translated_error_text = self.translation_service.translate_text(error_text, target_lang, source_lang)
+            translated_error_text, _, _ = self.translation_service.translate_text(error_text, english_lang, detected_source_lang)
             return QueryFailure(
                 error = translated_error_text,
                 session_id = query.session_id

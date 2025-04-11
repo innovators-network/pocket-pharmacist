@@ -15,7 +15,7 @@ class TranslationService(ABC):
         pass
 
     @abstractmethod
-    def translate_text(self, text: str, source_lang: str, target_lang: str) -> str:
+    def translate_text(self, text: str, source_lang: str | None, target_lang: str) -> tuple[str, str, str]:
         pass
 
 
