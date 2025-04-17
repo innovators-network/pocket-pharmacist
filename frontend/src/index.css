@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Increase base font size for small screens */
+@media (max-width: 768px) {
+  body {
+    font-size: 1.25rem;
+  }
+
+  .list-group-item,
+  .form-control,
+  .btn {
+    font-size: 1.25rem;
+  }
+
+  .dropdown-item {
+    font-size: 1.0rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1.5rem;
+  }
+}

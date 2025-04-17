@@ -194,6 +194,8 @@ const ChatPage: React.FC<ChatPageProps> = ({ repository, chatbotService}) => {
                     }}>
                     <Form.Control
                         type="text"
+                        inputMode="text"
+                        enterKeyHint="send"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type your query..."/>
@@ -227,7 +229,7 @@ const ChatPage: React.FC<ChatPageProps> = ({ repository, chatbotService}) => {
         <Container
             className="d-flex flex-column vh-100 p-1"
             style={{
-                maxWidth: "400px",
+                maxWidth: "480px",
                 border: "1px solid lightgray",
             }}>
             {loading && loadingSpinner()}

@@ -25,14 +25,12 @@ export function useConversationsViewModel(
             throw new Error("Current conversation not found");
         }
         if (conversation) {
-            const oldContext = conversation.context
-            const newContent = context
-            console.log("oldContext:", oldContext)
-            console.log("newContent:", newContent)
+            console.log("oldContext:", conversation.context)
+            console.log("newContent:", context)
             const updatedConversation: Conversation = {
                 ...conversation,
                 messages: messages,
-                context: context ?? conversation.context
+                context: context
             }
             try {
                 repostiory.save(updatedConversation)
@@ -73,7 +71,7 @@ export function useConversationsViewModel(
 
     const startNewConversation = async () => {
         try {
-            const conversation = await repostiory.create("Hello! How can I assist you today?");
+            const conversation = await repostiory.create("Welcome! I’m Pocket Pharmacist. Ask me anything about drugs, interactions, or side effects.");
             setCurrentConversation(conversation)
         } catch (error) {
             console.error("Error starting new conversation:", error);

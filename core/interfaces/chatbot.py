@@ -3,8 +3,7 @@ from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 
-from core.orchestration.query_handler import QueryHandler, QueryRequest, QuerySuccess, QueryFailure
-
+from core.orchestration.query_handler import QueryHandler, QueryRequest, QueryResponse
 
 @dataclass
 class ChatMessage:
@@ -39,23 +38,12 @@ class Chatbot:
         )
         
         query_response = self.query_handler.process_query(query_request)
-        chat_response: ChatMessage
-        if isinstance(query_response, QuerySuccess):
-            chat_response = ChatMessage(
-                sessionId = session_id,
-                timestamp = chat_message.timestamp,
-                text = query_response.text,
-                language = chat_message.language,
-                context = query_response.session_state
-            )
-        elif isinstance(query_response, QueryFailure):
-            chat_response = ChatMessage(
-                sessionId = session_id,
-                timestamp = datetime.now().isoformat(),
-                text = query_response.error,
-                language = chat_message.language,
-                context = query_request.session_state
-            )
-        else:
-            raise ValueError("Invalid query response type")
+
+        chat_response: ChatMessage = ChatMessage(
+            sessionId = session_id,
+            timestamp = chat_message.timestamp,
+            text = query_response.text,
+            language = chat_message.language,
+            context = query_response.session_state
+        )
         return chat_response

@@ -6,6 +6,9 @@ DRUG_SIDE_EFFECTS = "DrugSideEffects"
 DRUG_DOSAGE = "DrugDosage"
 DRUG_INTERACTIONS = "DrugInteractions"
 DRUG_WARNINGS = "DrugWarnings"
+DRUG_INDICATIONS_AND_USAGE = "DrugIndicationsAndUsage"
+
+DRUG_INTENTS = [DRUG_SIDE_EFFECTS, DRUG_DOSAGE, DRUG_INTERACTIONS, DRUG_WARNINGS, DRUG_INDICATIONS_AND_USAGE]
 
 @dataclass
 class Intent(ABC):
@@ -15,7 +18,6 @@ class Intent(ABC):
 class DrugIntent(Intent, ABC):
     intent_name: ClassVar[str]
     drug_name: str
-
 
 @dataclass
 class DrugSideEffectsIntent(DrugIntent):
@@ -35,10 +37,29 @@ class DrugWarningsIntent(DrugIntent):
     intent_name: ClassVar[str] = DRUG_WARNINGS
 
 @dataclass
-class UnknownIntent(Intent):
-    message: str
+class DrugIndicationsAndUsage(DrugIntent):
+    intent_name: ClassVar[str] = DRUG_INDICATIONS_AND_USAGE
 
 @dataclass
-class DrugIntentFulfillment:
-    intent: DrugIntent
-    message: str
+class UnknownIntent(Intent):
+    message: str | None
+
+
+@dataclass
+class IntentUndetermined(Intent):
+    message: str | None
+
+@dataclass
+class IntentRequiresSlotElicitation(IntentUndetermined):
+    intent_name: str
+    slot_name: str
+
+@dataclass
+class IntentRequiresConfirmation(IntentUndetermined):
+    intent_name: str
+    slots: dict[str, str]
+
+@dataclass
+class IntentRecognitionInProgress(IntentUndetermined):
+    pass
+

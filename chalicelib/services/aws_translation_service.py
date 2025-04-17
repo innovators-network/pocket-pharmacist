@@ -4,7 +4,7 @@ import logging
 from charset_normalizer import detect
 from typing_extensions import override
 
-from core.services.interfaces import TranslationService
+from core.services.translation_service import TranslationService
 
 logger = logging.getLogger(__name__)
 

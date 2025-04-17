@@ -2,10 +2,11 @@ import requests
 
 from typing import override
 
-from core.services.interfaces import MedicalInfoService
-from core.types.intents import Intent, DrugSideEffectsIntent, DrugDosageIntent, DrugInteractionsIntent, DrugWarningsIntent
+from core.services.medical_info_service import MedicalInfoService
+from core.types.intents import Intent, DrugSideEffectsIntent, DrugDosageIntent, DrugInteractionsIntent, \
+    DrugWarningsIntent, DrugIndicationsAndUsage
 
-from core.services.interfaces import MedicalInfo, MedicalInfoResponse, MedicalInfoError
+from core.services.medical_info_service import MedicalInfo, MedicalInfoError
 
 class OpenFDAMedicalInfoService(MedicalInfoService):
 
@@ -21,13 +22,13 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
         pass
 
     @override
-    def get_medical_info(self, intent: Intent) -> MedicalInfoResponse:
+    def get_medical_info(self, intent: Intent) -> MedicalInfo:
         try:
             return self._get_medical_info(intent)
         except Exception as e:
-            return MedicalInfoError(error=f"Error fetching medical information: {e}")
+            return MedicalInfoError(message=f"Error fetching medical information: {e}")
 
-    def _get_medical_info(self, intent: Intent) -> MedicalInfoResponse:
+    def _get_medical_info(self, intent: Intent) -> MedicalInfo:
         if isinstance(intent, DrugSideEffectsIntent):
             return self._handle_side_effects(intent)
         elif isinstance(intent, DrugDosageIntent):
@@ -36,10 +37,12 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
             return self._handle_interactions(intent)
         elif isinstance(intent, DrugWarningsIntent):
             return self._handle_warnings(intent)
+        elif isinstance(intent, DrugIndicationsAndUsage):
+            return self._handle_indications_and_usage(intent)
         else:
             raise ValueError(f"Unknown intent type: {type(intent)}")
 
-    def _handle_side_effects(self, intent: DrugSideEffectsIntent) -> MedicalInfoResponse:
+    def _handle_side_effects(self, intent: DrugSideEffectsIntent) -> MedicalInfo:
         drug_name = intent.drug_name
         resp = requests.get(
             url = f"{self.fda_api_url}/drug/event.json",
@@ -50,7 +53,7 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
         )
 
         if not resp.ok:
-            return MedicalInfoError(error=f"Couldn't fetch data for {drug_name}.")
+            return MedicalInfoError(message=f"Couldn't fetch data for {drug_name}.")
 
         data = resp.json()
         effects = []
@@ -63,12 +66,9 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
         text = f"Some reported side effects of {drug_name} include: " + ', '.join(
             unique_effects) if unique_effects else "No common side effects found."
 
-        return MedicalInfo(
-            intent=intent,
-            message=text
-        )
+        return MedicalInfo(message=text)
 
-    def _handle_dosage(self, intent: DrugDosageIntent) -> MedicalInfoResponse:
+    def _handle_dosage(self, intent: DrugDosageIntent) -> MedicalInfo:
         drug_name = intent.drug_name
         resp = requests.get(f"{self.fda_api_url}/drug/label.json", params={
             "search": f"openfda.brand_name:{drug_name}",
@@ -79,13 +79,10 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
         if resp.ok and resp.json().get("results"):
             dosage = resp.json()["results"][0].get("dosage_and_administration", [])
             text = f"Recommended dosage for {drug_name}: {dosage[0]}" if dosage else text
-        return MedicalInfo(
-            intent=intent,
-            message=text
-        )
+        return MedicalInfo(message=text)
 
 
-    def _handle_warnings(self, intent: DrugWarningsIntent) -> MedicalInfoResponse:
+    def _handle_warnings(self, intent: DrugWarningsIntent) -> MedicalInfo:
         drug_name = intent.drug_name
         resp = requests.get(f"{self.fda_api_url}/drug/label.json", params={
             "search": f"openfda.brand_name:{drug_name}",
@@ -96,12 +93,9 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
         if resp.ok and resp.json().get("results"):
             warnings = resp.json()["results"][0].get("warnings_and_cautions", [])
             text = f"Warning for {drug_name}: {warnings[0]}" if warnings else text
-        return MedicalInfo(
-            intent=intent,
-            message=text
-        )
+        return MedicalInfo(message=text)
 
-    def _handle_interactions(self, intent: DrugInteractionsIntent) -> MedicalInfoResponse:
+    def _handle_interactions(self, intent: DrugInteractionsIntent) -> MedicalInfo:
         drug_name = intent.drug_name
         other_drug = intent.other_drug_name
 
@@ -121,8 +115,19 @@ class OpenFDAMedicalInfoService(MedicalInfoService):
                 if interactions:
                     text = f"{drug_name} may interact with other drugs. Example: {interactions[0]}"
 
-        return MedicalInfo(
-            intent=intent,
-            message=text
-        )
+        return MedicalInfo(message=text)
+
+
+    def _handle_indications_and_usage(self, intent: DrugDosageIntent) -> MedicalInfo:
+        drug_name = intent.drug_name
+        resp = requests.get(f"{self.fda_api_url}/drug/label.json", params={
+            "search": f"openfda.brand_name:{drug_name}",
+            "limit": str(1)
+        })
+
+        text = "I couldn't find indications and usage information for that drug."
+        if resp.ok and resp.json().get("results"):
+            indications_and_usage = resp.json()["results"][0].get("indications_and_usage", [])
+            text = f"Recommended dosage for {drug_name}: {indications_and_usage[0]}" if indications_and_usage else text
+        return MedicalInfo(message=text)
 

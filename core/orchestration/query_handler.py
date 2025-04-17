@@ -1,13 +1,18 @@
+import logging
 
 from typing import Dict, Any, Optional, override
-from dataclasses import dataclass
-from core.services.interfaces import TranslationService, MedicalInfoError, MedicalInfo
-from core.services.interfaces import IntentRecognitionService
-from core.services.interfaces import MedicalInfoService
-import logging
+from dataclasses import dataclass, replace
+from core.services.medical_info_service import MedicalInfoError, MedicalInfo, MedicalInfoService
+from core.services.translation_service import TranslationService
+from core.services.intent_recognition_service import (
+    IntentRecognitionService,
+    IntentRecognitionResponse,
+
+)
 from datetime import datetime, timedelta
 
-from core.types.intents import UnknownIntent
+from core.types.intents import UnknownIntent, Intent, DrugIntent, DrugInteractionsIntent, DrugSideEffectsIntent, \
+    IntentUndetermined
 
 logger = logging.getLogger(__name__)
 
@@ -15,22 +20,18 @@ logger = logging.getLogger(__name__)
 class QueryRequest:
     text: str
     session_id: str
-    session_state: Any | None = None
-    language: str | None = None
+    session_state: Any | None
+    language: str | None
 
 @dataclass
-class QuerySuccess:
+class QueryResponse:
     text: str
     session_id: str
-    session_state: Any | None = None
-    language: str | None = None
+    session_state: Any | None
+    language: str | None
 
-@dataclass
-class QueryFailure:
-    error: str
-    session_id: str
 
-type QueryResponse = QuerySuccess | QueryFailure
+ENGLISH = "en"
 
 class QueryHandler:
 
@@ -43,8 +44,7 @@ class QueryHandler:
         self.translation_service = translation_service
         self.intent_recognition_service = intent_recognition_service
         self.medical_service = medical_service
-        self.session_data: Dict[str, Any] = {}
-        self.session_timeout = timedelta(hours=24)  # Session timeout after 24 hours
+        self.session_timeout = timedelta(hours = 24)  # Session timeout after 24 hours
 
     def initialize(self):
         self.translation_service.initialize()
@@ -60,72 +60,69 @@ class QueryHandler:
         try:
             return self._process_query(query)
         except Exception as e:
-            return QueryFailure(
-                error=str(e),
-                session_id=query.session_id
+            return QueryResponse(
+                text = str(e),
+                session_id = query.session_id,
+                session_state = query.session_state,
+                language = query.language
             )
 
     def _process_query(self, query: QueryRequest) -> QueryResponse:
         logger.info(f"Processing query for session {query.session_id}: {query.text}")
 
+        session_state = query.session_state
         source_lang = query.language
-        english_lang = "en"  # Default common language
-
-        translated_text_in_english, detected_source_lang, _ = self.translation_service.translate_text(query.text, source_lang, english_lang)
+        translated_text_in_english, detected_source_lang, _ = self.translation_service.translate_text(query.text, source_lang, ENGLISH)
         if not translated_text_in_english:
-            return QueryFailure(
-                error = f"Translation failed, language: {source_lang}",
-                session_id = query.session_id
-            )
-
-        if not source_lang:
-            if not detected_source_lang:
-                return QueryFailure(
-                    error = f"Language detection failed, language: {source_lang}",
-                    session_id = query.session_id
-                )
-            else:
-                logger.info(f"Detected source language: {detected_source_lang}")
-        else:
-            if detected_source_lang != source_lang:
-                logger.warning(f"Detected source language: {detected_source_lang}, expected: {source_lang}")
-
-        intent_response = self.intent_recognition_service.recognize_intent(translated_text_in_english, query.session_id, query.session_state)
-        intent = intent_response.intent
-
-        if isinstance(intent, UnknownIntent):
-            error_text = "I'm sorry, I couldn't understand your request. Could you please rephrase it?"
-            translated_error_text, _, _ = self.translation_service.translate_text(error_text, english_lang, detected_source_lang)
-            return QueryFailure(
-                error = translated_error_text,
-                session_id = query.session_id
-            )
-
-        medical_info_response = self.medical_service.get_medical_info(intent)
-
-        response: QueryResponse | None = None
-
-        if isinstance(medical_info_response, MedicalInfo):
-            medical_info = medical_info_response
-            medical_info_text_in_source_lang, _, _ = self.translation_service.translate_text(medical_info.message, english_lang, detected_source_lang)
-            response = QuerySuccess(
-                text = medical_info_text_in_source_lang,
+            return QueryResponse(
+                text = f"Translation failed, language: {source_lang}",
                 session_id = query.session_id,
-                session_state = intent_response.session_state,
+                session_state = session_state,
+                language = ENGLISH
+            )
+
+        if source_lang is None and detected_source_lang is None:
+            return QueryResponse(
+                text = f"Language detection failed, language: {source_lang}",
+                session_id = query.session_id,
+                session_state = session_state
+            )
+        elif detected_source_lang != source_lang:
+            logger.warning(f"Detected source language: {detected_source_lang}, expected: {source_lang}")
+        else:
+            logger.info(f"Detected source language: {detected_source_lang}")
+
+        intent_recognition_response: IntentRecognitionResponse = self.intent_recognition_service.recognize_intent(translated_text_in_english, query.session_id, session_state)
+        intent = intent_recognition_response.intent
+        session_state = intent_recognition_response.session_state
+
+        if isinstance(intent, (UnknownIntent, IntentUndetermined)):
+            message = intent.message or "Failed to recognize intent"
+            translated_message, _, _ = self.translation_service.translate_text(message, ENGLISH, detected_source_lang)
+            return QueryResponse(
+                text = translated_message,
+                session_id = query.session_id,
+                session_state = session_state,
                 language = detected_source_lang
             )
-        elif isinstance(medical_info_response, MedicalInfoError):
-            error_text = medical_info_response.error
-            translated_error_text, _, _ = self.translation_service.translate_text(error_text, english_lang, detected_source_lang)
-            return QueryFailure(
-                error = translated_error_text,
-                session_id = query.session_id
-            )
-        else:
-            logger.error("Unexpected response from medical service")
-            return QueryFailure(
-                error = "An unexpected error occurred while processing your request.",
-                session_id = query.session_id
+
+        assert isinstance(intent, DrugIntent)
+        medical_info: MedicalInfo = self.medical_service.get_medical_info(intent)
+        medical_info_message = medical_info.message
+        logger.info("Medical info message in English: %s", medical_info_message)
+        if isinstance(medical_info, MedicalInfoError):
+            translated_error_message, _, _ = self.translation_service.translate_text(medical_info_message, ENGLISH, detected_source_lang)
+            return QueryResponse(
+                text = translated_error_message,
+                session_id = query.session_id,
+                session_state = session_state,
+                language = detected_source_lang
             )
 
-        return response
+        translated_medical_info_message, _, _ = self.translation_service.translate_text(medical_info_message, ENGLISH, detected_source_lang)
+        return QueryResponse(
+            text = translated_medical_info_message,
+            session_id = query.session_id,
+            session_state = session_state,
+            language = detected_source_lang
+        )

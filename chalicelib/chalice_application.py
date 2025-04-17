@@ -56,7 +56,7 @@ class ChaliceApplication(Application):
                     'details': e.details,
                     'status': 'error'
                 },
-                status_code=e.status_code
+                status_code = e.status_code
             )
         except Exception as e:
             self.logger.error(f"Unexpected error: {str(e)}", exc_info=True)
@@ -65,7 +65,7 @@ class ChaliceApplication(Application):
                     'error': 'Internal server error',
                     'status': 'error'
                 },
-                status_code=500
+                status_code = 500
             )
 
     def _chat(self) -> Response:
@@ -92,6 +92,7 @@ class ChaliceApplication(Application):
         )
         response: ChatMessage = self.chatbot.handle_chat_message(chat_message)
         response_dict = asdict(response)
+        print("Response Dict:", json.dumps(response_dict, indent=2))
         return Response(
             body=response_dict,
             status_code=200

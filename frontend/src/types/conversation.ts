@@ -5,5 +5,5 @@ export interface Conversation {
     timestamp: string;
     name: string;
     messages: Message[];
-    context?: string;
+    context?: any;
 }

@@ -14,12 +14,12 @@ from core.interfaces.chatbot import Chatbot
 #
 
 from chalicelib.chalice_application import ChaliceApplication
-from chalicelib.services.translation_service import AWSTranslationService
-from chalicelib.services.recognition_service import AWSIntentRecognitionService
-from fda.services.medical_service import OpenFDAMedicalInfoService
+from chalicelib.services.aws_translation_service import AWSTranslationService
+from chalicelib.services.aws_intent_recognition_service import AWSIntentRecognitionService
+from fda.services.fda_medical_info_service import OpenFDAMedicalInfoService
 
 # Replace with your actual Lex bot ID and alias ID
-lex_bot_id = "SKB6O0KIL2"
+lex_bot_id = "REEELJTULL"
 lex_bot_alias_id = "TSTALIASID"
 
 query_handler = QueryHandler(
